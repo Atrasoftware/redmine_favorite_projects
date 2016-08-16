@@ -5,4 +5,4 @@ Cloned from https://goo.gl/b9qrY1 with the aim of adding new features such as:
 
 * sorting ability in the issues' list view
 * ajax search through custom fields
-* right click contect menu
+* right click context menu
