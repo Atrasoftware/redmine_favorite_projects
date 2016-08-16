@@ -1,0 +1,13 @@
+<p class="extended">
+  <label><%= l(:label_favorite_project_tags_plural) %></label>
+
+  <span class="favorite-project-tags-edit">
+     <%= text_field_tag 'project[tag_list]', "#{@project.tags.map(&:name).join(',').html_safe}", :size => 10, :class => 'hol', :id => "allowSpacesTags" %><%= favorite_project_tagsedit_with_source_for('#allowSpacesTags', auto_complete_project_tags_path) %>
+  </span>
+</p>
+
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag :redmine_favorite_projects, :plugin => 'redmine_favorite_projects'  %>
+<% end %>
+

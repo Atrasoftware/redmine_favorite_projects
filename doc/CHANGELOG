@@ -1,0 +1,37 @@
+== Redmine Favorite Projects plugin changelog
+
+Favorite Projects plugin - Redmine project views improvements
+Copyright (C) 2011-2016  RedmineCRM
+http://www.redminecrm.com/projects/favoriteprojects
+
+== 2016-02-25 v2.0.2
+
+* Default columns and view style settings
+* Fixed bug with private projects view
+* Fixed bug with <<me>> member filter
+* Fixed bug with custom field translation
+* Fixed bug with tags autocomplete search
+
+== 2016-02-11 v2.0.1
+
+* Fixed pagination bug
+* Added query title
+
+== 2016-02-10 v2.0.0
+
+* Redmine 3+ support
+* Saved queries
+* Tags
+* Project cards view
+
+== 2013-05-04 v1.0.1
+
+* New live search field
+* Fixed application_helper dependency
+
+== 2013-03-12 v1.0.0
+
+* Redmine 2.1+ support
+* Ajax favorite/unfavorite
+* Ajax searching
+* Filters
