@@ -8,7 +8,12 @@
               <th style="display: none;"></th>
               <th></th>
               <% @query.columns.each do |column| %>
-                  <%= column_header(column) %>
+                  <% if column.class == QueryCustomFieldColumn %>
+                      <%= content_tag('th', h(column.caption)) %>
+                  <% else %>
+                      <%= column_header(column) %>
+                  <% end %>
+
               <% end %>
             </tr></thead>
             <tbody>
