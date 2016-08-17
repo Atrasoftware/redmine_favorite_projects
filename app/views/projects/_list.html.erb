@@ -1,22 +1,26 @@
 <% if @projects.empty? %>
     <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
-<div class="autoscroll">
-  <table class="list">
-    <thead><tr>
-    <th></th>
-    <% @query.columns.each do |column| %>
-      <%= content_tag('th', h(column.caption)) %>
+    <%= form_tag({}) do -%>
+        <div class="autoscroll">
+          <table class="list">
+            <thead><tr>
+              <th style="display: none;"></th>
+              <th></th>
+              <% @query.columns.each do |column| %>
+                  <%= content_tag('th', h(column.caption)) %>
+              <% end %>
+            </tr></thead>
+            <tbody>
+            <% project_tree(@projects) do |project, level| %>
+                <tr class="hascontextmenu <%= cycle("odd", "even") %> <%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+                  <td class="checkbox hide-when-print" style="display: none;"><%= check_box_tag("ids[]", project.id, false, :id => nil) %></td>
+                  <td><%= favorite_tag(project, User.current) %></td>
+                  <% @query.columns.each do |column| %><%= content_tag 'td', column_content(column, project), :class => column.css_classes %><% end %>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
     <% end %>
-    </tr></thead>
-    <tbody>
-      <% project_tree(@projects) do |project, level| %>
-        <tr class="<%= cycle("odd", "even") %> <%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-            <td><%= favorite_tag(project, User.current) %></td>
-              <% @query.columns.each do |column| %><%= content_tag 'td', column_content(column, project), :class => column.css_classes %><% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
 <% end %>
