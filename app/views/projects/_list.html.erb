@@ -8,7 +8,7 @@
               <th style="display: none;"></th>
               <th></th>
               <% @query.columns.each do |column| %>
-                  <%= content_tag('th', h(column.caption)) %>
+                  <%= column_header(column) %>
               <% end %>
             </tr></thead>
             <tbody>

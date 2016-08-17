@@ -2,12 +2,17 @@ class FavoriteProjectsController < ApplicationController
   unloadable
   include FavoriteProjectsHelper
   helper :queries
+  helper :sort
+  include SortHelper
 
   before_filter { deny_access unless User.current.logged? }
   before_filter :find_project_by_project_id, :except => :search
 
   def search
     retrieve_projects_query
+    sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
+    sort_update(@query.sortable_columns)
+    @query.sort_criteria = sort_criteria.to_a
 
     @limit = Setting.feeds_limit.to_i
 
@@ -34,7 +39,7 @@ class FavoriteProjectsController < ApplicationController
           :search => params[:search],
           :limit  =>  @limit,
           :offset =>  @offset
-      )
+      ).order(sort_clause)
 
       respond_to do |format|
         if request.xhr?
