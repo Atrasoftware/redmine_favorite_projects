@@ -8,6 +8,7 @@ class FavoriteProjectsQuery < Query
   @@default_filters = { 'status' => {:operator => "=", :values => ["#{Project::STATUS_ACTIVE}"]} }
 
   self.available_columns = [
+    QueryColumn.new(:identifier, :sortable => "#{Project.table_name}.identifier", :caption => :field_identifier, :default_order => 'desc'),
     QueryColumn.new(:name, :sortable => "#{Project.table_name}.name", :caption => :field_name, :default_order => 'desc'),
     QueryColumn.new(:description, :sortable => "#{Project.table_name}.description", :caption => :field_description, :default_order => 'desc'),
     QueryColumn.new(:created_on, :sortable => "#{Project.table_name}.created_on", :caption => :field_created_on, :default_order => 'desc'),
@@ -91,8 +92,9 @@ class FavoriteProjectsQuery < Query
 
   def initialize_available_filters
     add_available_filter "name", :type => :string, :name => l(:field_name), :order => 0
-    add_available_filter "description", :type => :string, :name => l(:field_description), :order => 1
-    add_available_filter "created_on", :type => :date_past, :order => 2
+    add_available_filter "identifier", :type => :string, :name => l(:field_identifier), :order => 1
+    add_available_filter "description", :type => :string, :name => l(:field_description), :order => 2
+    add_available_filter "created_on", :type => :date_past, :order => 3
 
     add_available_filter("is_favorite",
       :type => :list,

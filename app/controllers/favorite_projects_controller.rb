@@ -12,7 +12,7 @@ class FavoriteProjectsController < ApplicationController
     retrieve_projects_query
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
     sort_update(@query.sortable_columns)
-    @query.sort_criteria = sort_criteria.to_a
+    @query.sort_criteria = @query.sort_criteria
 
     @limit = Setting.feeds_limit.to_i
 
