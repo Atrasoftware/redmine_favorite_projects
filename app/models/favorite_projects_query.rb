@@ -161,7 +161,9 @@ class FavoriteProjectsQuery < Query
     scope = Project.visible
 
     if options[:search].present?
-      scope = scope.where(seach_condition(options[:search])).joins("JOIN #{CustomValue.table_name} ON #{CustomValue.table_name}.customized_id = projects.id ")
+      scope = scope.where(seach_condition(options[:search])).
+          joins("JOIN #{CustomValue.table_name} ON #{CustomValue.table_name}.customized_id = projects.id ").
+          uniq
     end
 
     if query_includes.present?
