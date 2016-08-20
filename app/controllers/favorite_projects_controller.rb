@@ -12,7 +12,7 @@ class FavoriteProjectsController < ApplicationController
     retrieve_projects_query
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
     sort_update(@query.sortable_columns)
-    @query.sort_criteria = @query.sort_criteria
+    @query.sort_criteria = sort_criteria.to_a
 
     @limit = Setting.feeds_limit.to_i
 
@@ -37,9 +37,10 @@ class FavoriteProjectsController < ApplicationController
       @projects = @query.results_scope(
           :include => [:avatar],
           :search => params[:search],
+          :order => sort_clause,
           :limit  =>  @limit,
           :offset =>  @offset
-      ).order(sort_clause)
+      )
 
       respond_to do |format|
         if request.xhr?

@@ -189,6 +189,7 @@ class FavoriteProjectsQuery < Query
 
     objects_scope(options).
       joins(joins_for_order_statement(order_option.join(','))).
+      order(order_option).
       limit(options[:limit]).
       offset(options[:offset])
   rescue ::ActiveRecord::StatementInvalid => e

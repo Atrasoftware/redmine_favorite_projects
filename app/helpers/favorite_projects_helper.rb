@@ -5,10 +5,11 @@ module FavoriteProjectsHelper
     if params[:query_id].present?
       @query = FavoriteProjectsQuery.find(params[:query_id])
       raise ::Unauthorized unless @query.visible?
+      session[self.sort_name] = @query.sort_criteria.is_a?(Array) ? @query.sort_criteria.map{|t| t.join(':')}.join(',') : nil
       session[:favorite_projects_query] = {:id => @query.id}
     elsif api_request? || params[:set_filter] || session[:favorite_projects_query].nil?
       # Give it a name, required to be valid
-      session[self.sort_name] = nil
+      # session[self.sort_name] = nil
       @query = FavoriteProjectsQuery.new(:name => "_")
       @query.build_from_params(params)
       session[:favorite_projects_query] = {:filters => @query.filters, :column_names => @query.column_names}

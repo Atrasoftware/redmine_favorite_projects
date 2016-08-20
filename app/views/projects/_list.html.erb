@@ -17,8 +17,8 @@
               <% end %>
             </tr></thead>
             <tbody>
-            <% project_tree(@projects) do |project, level| %>
-                <tr class="hascontextmenu <%= cycle("odd", "even") %> <%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+            <% @projects.each do |project| %>
+                <tr class="hascontextmenu <%= cycle("odd", "even") %> <%= project.css_classes %> <%#= level > 0 ? "idnt idnt-#{level}" : nil %>">
                   <td class="checkbox hide-when-print" style="display: none;"><%= check_box_tag("ids[]", project.id, false, :id => nil) %></td>
                   <td><%= favorite_tag(project, User.current) %></td>
                   <% @query.columns.each do |column| %><%= content_tag 'td', column_content(column, project), :class => column.css_classes %><% end %>
