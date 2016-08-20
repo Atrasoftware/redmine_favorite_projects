@@ -60,6 +60,9 @@ class FavoriteProjectsController < ApplicationController
           projects = @projects.reorder(:created_on => :desc).limit(Setting.feeds_limit.to_i).to_a
           render_feed(projects, :title => "#{Setting.app_title}: #{l(:label_project_latest)}")
         }
+        format.pdf{
+          send_data(ProjectsHelper.to_pdf(@projects, @query), :type => 'application/pdf', :filename => 'projects.pdf')
+        }
       end
     else #not valid query
       respond_to do |format|
