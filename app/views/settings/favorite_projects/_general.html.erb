@@ -8,10 +8,25 @@
 <fieldset class="box" id="favorite_projects_box">
   <legend><%= l(:setting_issue_list_default_columns) %></legend>
   <%= render_query_columns_selection(
-        FavoriteProjectsQuery.new(:column_names => RedmineFavoriteProjects.favorite_projects_list_default_columns),
-        :name => 'settings[favorite_projects_list_default_columns]') %>
+          FavoriteProjectsQuery.new(:column_names => RedmineFavoriteProjects.favorite_projects_list_default_columns),
+          :name => 'settings[favorite_projects_list_default_columns]') %>
+</fieldset>
+<fieldset class="box" id="favorite_projects_box">
+  <legend></legend>
+  <%= label_tag "query_sort_criteria_attribute_",
+                l(:description_query_sort_criteria_attribute) %>
+  <%= select_tag("settings[sort_criteria]",
+                 options_for_select([] + FavoriteProjectsQuery.available_columns.select(&:sortable?).collect {|column| [column.caption, column.name.to_s]}, selected: @settings['sort_criteria']),
+                 :id => "query_sort_criteria_attribute_" )%>
+  <br/>
+  <%= label_tag "query_sort_criteria_direction_",
+                l(:description_query_sort_criteria_direction) %>
+  <%= select_tag("settings[sort_criteria_order]",
+                 options_for_select([[l(:label_ascending), 'asc'], [l(:label_descending), 'desc']], selected: @settings["sort_criteria_order"]),
+                 :id => "query_sort_criteria_direction_") %>
+  <br />
 </fieldset>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag :redmine_favorite_projects, :plugin => 'redmine_favorite_projects' %>
+    <%= stylesheet_link_tag :redmine_favorite_projects, :plugin => 'redmine_favorite_projects' %>
 <% end %>

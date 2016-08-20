@@ -10,7 +10,12 @@ class FavoriteProjectsController < ApplicationController
 
   def search
     retrieve_projects_query
-    sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
+    setting = Setting.plugin_redmine_favorite_projects
+    sort = [['id', 'desc']]
+    if setting['sort_criteria'].present? and  setting['sort_criteria_order'].present?
+      sort = [[setting['sort_criteria'],setting['sort_criteria_order']]]
+    end
+    sort_init(@query.sort_criteria.empty? ? sort : @query.sort_criteria)
     sort_update(@query.sortable_columns)
     @query.sort_criteria = sort_criteria.to_a
 
