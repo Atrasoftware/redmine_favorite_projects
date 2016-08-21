@@ -32,7 +32,9 @@ module RedmineFavoriteProjects
             # calculate statistics
             #  by captions
 
-            cols = columns.map{|c| c.name.to_s }
+            cols = columns.map{|c|
+              c.is_a?(QueryCustomFieldColumn) ? c.custom_field.name : c.name.to_s
+            }
 
 
             pdf.SetFontStyle('B',8)
@@ -137,7 +139,9 @@ module RedmineFavoriteProjects
           end
           def self.render_table_project_header(pdf, columns, col_width, row_height, table_width)
             # cols = hash.map{|k,v| k}
-            cols = columns.map{|c| c.name.to_s }
+            cols = columns.map{|c|
+              c.is_a?(QueryCustomFieldColumn) ? c.custom_field.name : c.name.to_s
+            }
             # headers
             pdf.SetFontStyle('B',8)
             pdf.set_fill_color(230, 230, 230)
