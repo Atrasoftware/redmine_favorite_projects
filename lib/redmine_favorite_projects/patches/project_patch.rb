@@ -31,11 +31,11 @@ module RedmineFavoriteProjects
         ancestors = []
         setting = Setting.plugin_redmine_favorite_projects
         sort = :lft
-        sorted_projects = projects.sort_by(&sort)
+
         if setting['sort_criteria'].present?
           sort = setting['sort_criteria'].to_sym
         end
-
+        sorted_projects = projects.sort_by(&sort)
         if setting['sort_criteria_order'].present?
           sorted_projects = sorted_projects.reverse if  setting['sort_criteria_order'] == 'desc'
         end
