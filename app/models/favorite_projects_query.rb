@@ -160,7 +160,7 @@ class FavoriteProjectsQuery < Query
   end
 
   def objects_scope(options={})
-    scope = Project.visible
+    scope = Project.visible.active
 
     if options[:search].present?
       scope = scope.where(seach_condition(options[:search])).
