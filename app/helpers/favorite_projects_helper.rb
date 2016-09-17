@@ -22,7 +22,8 @@ module FavoriteProjectsHelper
 
   def favorite_tag(object, user, options={})
     return '' unless user && user.logged?
-    favorite = FavoriteProject.favorite?(object.id, user.id)
+    favorite = options[:favorite]
+    favorite = FavoriteProject.favorite?(object.id, user.id) unless favorite
     url = {:controller => 'favorite_projects',
            :action => (favorite ? 'unfavorite' : 'favorite'),
            :project_id => object.id}

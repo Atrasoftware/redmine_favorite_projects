@@ -160,7 +160,7 @@ class FavoriteProjectsQuery < Query
   end
 
   def objects_scope(options={})
-    scope = Project.visible.active
+    scope = Project.visible
 
     if options[:search].present?
       scope = scope.where(seach_condition(options[:search])).
@@ -186,9 +186,9 @@ class FavoriteProjectsQuery < Query
 
   def results_scope(options={})
     order_option = [group_by_sort_order, options[:order]].flatten.reject(&:blank?)
-
+    v = joins_for_order_statement(order_option.join(','))
     objects_scope(options).
-      joins(joins_for_order_statement(order_option.join(','))).
+      includes(v).references(v).
       order(order_option).
       limit(options[:limit]).
       offset(options[:offset])

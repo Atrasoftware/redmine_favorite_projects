@@ -47,6 +47,8 @@ class FavoriteProjectsController < ApplicationController
           :offset =>  @offset
       )
 
+      @favorites = FavoriteProject.all_favorite(@projects.pluck(:id), User.current.id)
+
       respond_to do |format|
         if request.xhr?
           format.html { render :partial => "projects/#{favorite_project_list_style}", :layout => false }
