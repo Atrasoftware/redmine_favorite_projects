@@ -18,9 +18,9 @@ module RedmineFavoriteProjects
 
           @tags = Project.available_tags
 
-          q = (params[:q] || params[:term]).to_s.strip
+          q = (params[:q] || params[:term]).to_s.strip.downcase
           if q.present?
-            @tags = @tags.where("#{RedmineCrm::Tag.table_name}.name LIKE ?", "%#{q}%").limit(10)
+            @tags = @tags.where("LOWER(#{RedmineCrm::Tag.table_name}.name) LIKE ?", "%#{q}%").limit(10)
           end
           render :layout => false, :partial => 'project_tag_list'
         end

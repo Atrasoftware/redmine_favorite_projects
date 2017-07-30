@@ -1,23 +1,15 @@
 class FavoriteProjectsController < ApplicationController
   unloadable
   include FavoriteProjectsHelper
+  helper :projects
+  helper :custom_fields
   helper :queries
-  helper :sort
-  include SortHelper
 
-  before_filter { deny_access unless User.current.logged? }
+  before_filter :deny_for_unauthorized, :only => [:favorite, :unfavorite, :favorite_css]
   before_filter :find_project_by_project_id, :except => :search
 
   def search
     retrieve_projects_query
-    setting = Setting.plugin_redmine_favorite_projects
-    sort = [['id', 'desc']]
-    if setting['sort_criteria'].present? and  setting['sort_criteria_order'].present?
-      sort = [[setting['sort_criteria'],setting['sort_criteria_order']]]
-    end
-    sort_init(@query.sort_criteria.empty? ? sort : @query.sort_criteria)
-    sort_update(@query.sortable_columns)
-    @query.sort_criteria = sort_criteria.to_a
 
     @limit = Setting.feeds_limit.to_i
 
@@ -42,12 +34,9 @@ class FavoriteProjectsController < ApplicationController
       @projects = @query.results_scope(
           :include => [:avatar],
           :search => params[:search],
-          :order => sort_clause,
           :limit  =>  @limit,
           :offset =>  @offset
       )
-
-      @favorites = FavoriteProject.all_favorite(@projects.pluck(:id), User.current.id)
 
       respond_to do |format|
         if request.xhr?
@@ -67,9 +56,6 @@ class FavoriteProjectsController < ApplicationController
         format.atom {
           projects = @projects.reorder(:created_on => :desc).limit(Setting.feeds_limit.to_i).to_a
           render_feed(projects, :title => "#{Setting.app_title}: #{l(:label_project_latest)}")
-        }
-        format.pdf{
-          send_data(ProjectsHelper.to_pdf(@projects, @query), :type => 'application/pdf', :filename => 'projects.pdf')
         }
       end
     else #not valid query
@@ -122,4 +108,7 @@ class FavoriteProjectsController < ApplicationController
     render :text => (favorite ? 'Favorite added.' : 'Favorite removed.'), :layout => true
   end
 
+  def deny_for_unauthorized
+    deny_access unless User.current.logged?
+  end
 end

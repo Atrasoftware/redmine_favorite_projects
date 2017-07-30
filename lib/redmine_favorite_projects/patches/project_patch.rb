@@ -5,7 +5,6 @@ module RedmineFavoriteProjects
     module ProjectPatch
       def self.included(base) # :nodoc:
         base.extend(ClassMethods)
-
         base.class_eval do
           unloadable
           safe_attributes 'tag_list'
@@ -15,9 +14,13 @@ module RedmineFavoriteProjects
             alias_method_chain :project_tree, :order
             alias_method_chain :next_identifier, :year
           end
+
         end
       end
+
+
     end
+
     module ClassMethods
       def next_identifier_with_year
         year = Date.today.year
@@ -27,11 +30,15 @@ module RedmineFavoriteProjects
         # p.nil? ? nil : p.identifier.to_s.succ
         "c#{year%2000}#{"%03d" % p.succ}"
       end
-      def project_tree_with_order(projects, &block)
+
+
+      def project_tree_with_order(projects, options= {}, &block)
         ancestors = []
         setting = Setting.plugin_redmine_favorite_projects
         sort = :lft
-
+        if options[:init_level] && projects.first
+          ancestors = projects.first.ancestors.to_a
+        end
         if setting['sort_criteria'].present?
           sort = setting['sort_criteria'].to_sym
         end

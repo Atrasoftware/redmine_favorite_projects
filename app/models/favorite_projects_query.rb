@@ -8,13 +8,13 @@ class FavoriteProjectsQuery < Query
   @@default_filters = { 'status' => {:operator => "=", :values => ["#{Project::STATUS_ACTIVE}"]} }
 
   self.available_columns = [
-    QueryColumn.new(:identifier, :sortable => "#{Project.table_name}.identifier", :caption => :field_identifier, :default_order => 'desc'),
-    QueryColumn.new(:name, :sortable => "#{Project.table_name}.name", :caption => :field_name, :default_order => 'desc'),
-    QueryColumn.new(:description, :sortable => "#{Project.table_name}.description", :caption => :field_description, :default_order => 'desc'),
-    QueryColumn.new(:created_on, :sortable => "#{Project.table_name}.created_on", :caption => :field_created_on, :default_order => 'desc'),
-    QueryColumn.new(:is_public, :sortable => "#{Project.table_name}.is_public", :caption => :field_is_public, :default_order => 'desc'),
-    QueryColumn.new(:status, :sortable => "#{Project.table_name}.status", :caption => :field_status, :default_order => 'desc'),
-    QueryColumn.new(:tags),
+      QueryColumn.new(:identifier, :sortable => "#{Project.table_name}.identifier", :caption => :field_identifier, :default_order => 'desc'),
+    QueryColumn.new(:name, :sortable => "#{Project.table_name}.name", :caption => :field_name),
+    QueryColumn.new(:description, :sortable => "#{Project.table_name}.description", :caption => :field_description),
+    QueryColumn.new(:created_on, :sortable => "#{Project.table_name}.created_on", :caption => :field_created_on),
+    QueryColumn.new(:is_public, :sortable => "#{Project.table_name}.is_public", :caption => :field_is_public),
+    QueryColumn.new(:status, :sortable => "#{Project.table_name}.status", :caption => :field_status),
+    QueryColumn.new(:tags, :caption => :label_favorite_project_tags_plural),
   ]
 
   scope :visible, lambda {|*args|
@@ -93,8 +93,8 @@ class FavoriteProjectsQuery < Query
   def initialize_available_filters
     add_available_filter "name", :type => :string, :name => l(:field_name), :order => 0
     add_available_filter "identifier", :type => :string, :name => l(:field_identifier), :order => 1
-    add_available_filter "description", :type => :string, :name => l(:field_description), :order => 2
-    add_available_filter "created_on", :type => :date_past, :order => 3
+    add_available_filter "description", :type => :string, :name => l(:field_description), :order => 1
+    add_available_filter "created_on", :type => :date_past, :order => 2
 
     add_available_filter("is_favorite",
       :type => :list,
@@ -139,7 +139,7 @@ class FavoriteProjectsQuery < Query
     add_available_filter("user_id",
       :type => :list, :values => users_values, :name => l(:label_members), :order => 7
     ) unless users_values.empty?
-    
+
     add_available_filter "tags", :type => :list, :values => Project.available_tags.collect{ |t| [t.name, t.name] }, :order => 8
 
     add_custom_fields_filters(ProjectCustomField.where(:is_filter => true))
@@ -160,12 +160,10 @@ class FavoriteProjectsQuery < Query
   end
 
   def objects_scope(options={})
-    scope = Project.visible
+    scope = Project.visible.order(:lft)
 
     if options[:search].present?
-      scope = scope.where(seach_condition(options[:search])).
-          joins("JOIN #{CustomValue.table_name} ON #{CustomValue.table_name}.customized_id = projects.id ").
-          uniq
+      scope = scope.where(seach_condition(options[:search]))
     end
 
     if query_includes.present?
@@ -186,10 +184,9 @@ class FavoriteProjectsQuery < Query
 
   def results_scope(options={})
     order_option = [group_by_sort_order, options[:order]].flatten.reject(&:blank?)
-    v = joins_for_order_statement(order_option.join(','))
+
     objects_scope(options).
-      includes(v).references(v).
-      order(order_option).
+      joins(joins_for_order_statement(order_option.join(','))).
       limit(options[:limit]).
       offset(options[:offset])
   rescue ::ActiveRecord::StatementInvalid => e
@@ -228,7 +225,7 @@ class FavoriteProjectsQuery < Query
     pattern = "%#{search.to_s.strip.downcase}%"
     ["(LOWER(#{Project.table_name}.name) LIKE :p OR
        LOWER(identifier) LIKE :p OR
-       LOWER(#{Project.table_name}.description) LIKE :p OR (#{CustomValue.table_name}.customized_type = 'Project' AND #{CustomValue.table_name}.value LIKE :p ))",
+       LOWER(#{Project.table_name}.description) LIKE :p)",
        {:p => pattern}]
   end
 

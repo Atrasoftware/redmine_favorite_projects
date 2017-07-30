@@ -90,9 +90,9 @@
   </div>
 
   <% if User.current.logged? %>
-  <p style="text-align:right;">
-  <span class="my-project"><%= l(:label_favorite_projects) %></span>
-  </p>
+    <p style="text-align:right;">
+      <span class="my-project"><%= l(:label_favorite_projects) %></span>
+    </p>
   <% end %>
 <% end %>
 <% content_for :sidebar do %>
@@ -108,11 +108,6 @@
 
 <% other_formats_links do |f| %>
 	<%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
-    <% if params['page'] %>
-        <%= link_to 'PDF', projects_path(params.merge(:format=>'pdf')) %>
-    <% else %>
-        <%= f.link_to 'PDF', :url => params %>
-    <% end %>
 <% end %>
 
 <% content_for :header_tags do %>
@@ -121,4 +116,3 @@
 <% end %>
 
 <% html_title(l(:label_project_plural)) -%>
-<%= context_menu project_context_menu_path %>

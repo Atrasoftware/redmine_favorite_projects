@@ -9,7 +9,6 @@ Rails.configuration.to_prepare do
   require 'redmine_favorite_projects/patches/projects_helper_patch'
   require 'redmine_favorite_projects/patches/auto_completes_controller_patch'
   require 'redmine_favorite_projects/patches/queries_helper_patch'
-  require 'redmine_favorite_projects/patches/context_menus_controller_patch'
 end
 
 module RedmineFavoriteProjects

@@ -4,6 +4,13 @@ Favorite Projects plugin - Redmine project views improvements
 Copyright (C) 2011-2016  RedmineCRM
 http://www.redminecrm.com/projects/favoriteprojects
 
+== 2016-08-17 v2.0.3
+
+* Autocomplete case sensitivity fixes
+* Pagination fixes
+* Tags translation fixes
+* Fixed bug with REST API
+
 == 2016-02-25 v2.0.2
 
 * Default columns and view style settings

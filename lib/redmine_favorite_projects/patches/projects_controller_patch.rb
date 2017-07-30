@@ -18,8 +18,8 @@ module RedmineFavoriteProjects
       module InstanceMethods
         def index_with_favorite_projects
           p = request.parameters
-          p.except!(:controller,:action)
-          redirect_to(search_favorite_projects_path(p) ) and return
+          p.except!(:controller, :action)
+          redirect_to(search_favorite_projects_path(p)) and return
         end
       end
 
@@ -27,7 +27,7 @@ module RedmineFavoriteProjects
   end
 end
 
-#ActionDispatch::Reloader.to_prepare do   
+#ActionDispatch::Reloader.to_prepare do
   unless ProjectsController.included_modules.include?(RedmineFavoriteProjects::Patches::ProjectsControllerPatch)
     ProjectsController.send(:include, RedmineFavoriteProjects::Patches::ProjectsControllerPatch)
   end
