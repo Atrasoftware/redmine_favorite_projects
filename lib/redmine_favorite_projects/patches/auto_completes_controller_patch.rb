@@ -16,7 +16,7 @@ module RedmineFavoriteProjects
             return
           end
 
-          @tags = Project.available_tags
+          @tags = Project.available_tags(limit: 50)
 
           q = (params[:q] || params[:term]).to_s.strip.downcase
           if q.present?

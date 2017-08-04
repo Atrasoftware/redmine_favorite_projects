@@ -24,7 +24,7 @@ module RedmineFavoriteProjects
           projects = Project.visible unless projects.any?
 
           if projects.any?
-            s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            s = '<select id="project_quick_jump_box" onchange="if (this.value != \'\') { window.location = this.value; }">' +
             "<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
             '<option value="" disabled="disabled">---</option>'
             s << project_tree_options_for_select(projects, :selected => @project) do |p|

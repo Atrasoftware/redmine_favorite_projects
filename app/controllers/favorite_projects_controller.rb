@@ -42,7 +42,7 @@ class FavoriteProjectsController < ApplicationController
         if request.xhr?
           format.html { render :partial => "projects/#{favorite_project_list_style}", :layout => false }
         else
-          @tags = Project.available_tags
+          @tags = Project.available_tags(limit: 50)
           format.html { render :template => "projects/index"}
         end
         format.js { render :partial => "search" }
@@ -61,7 +61,7 @@ class FavoriteProjectsController < ApplicationController
     else #not valid query
       respond_to do |format|
         format.html do
-          @tags = Project.available_tags
+          @tags = Project.available_tags(limit: 50)
           render(:template => 'projects/index', :layout => !request.xhr?)
         end
         format.any(:atom, :csv, :pdf) { render(:nothing => true) }

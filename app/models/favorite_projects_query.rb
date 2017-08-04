@@ -140,7 +140,7 @@ class FavoriteProjectsQuery < Query
       :type => :list, :values => users_values, :name => l(:label_members), :order => 7
     ) unless users_values.empty?
 
-    add_available_filter "tags", :type => :list, :values => Project.available_tags.collect{ |t| [t.name, t.name] }, :order => 8
+    add_available_filter "tags", :type => :list, :values => Project.available_tags(limit: 100).collect{ |t| [t.name, t.name] }, :order => 8
 
     add_custom_fields_filters(ProjectCustomField.where(:is_filter => true))
   end
