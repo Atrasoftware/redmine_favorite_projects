@@ -36,7 +36,6 @@ module RedmineFavoriteProjects
               value
             end
           elsif column.name == :tags && list_object.is_a?(Project)
-            binding.pry
             project_tags = []
             value.each do |tag|
               project_tags << tag.name
