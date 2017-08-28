@@ -1,6 +1,6 @@
 class FavoriteProjectsQuery < Query
   self.queried_class = Project
-
+  self.view_permission = :view_project
   VISIBILITY_PRIVATE = 0
   VISIBILITY_ROLES   = 1
   VISIBILITY_PUBLIC  = 2
