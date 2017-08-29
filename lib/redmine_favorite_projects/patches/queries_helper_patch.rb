@@ -35,6 +35,8 @@ module RedmineFavoriteProjects
             else
               value
             end
+          elsif column.is_a? QueryCustomFieldColumn and column.custom_field.is_a? ProjectCustomField
+            column.value_object(list_object.project)
           elsif column.name == :tags && list_object.is_a?(Project)
             project_tags = []
             value.each do |tag|

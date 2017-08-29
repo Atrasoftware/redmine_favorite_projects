@@ -5,6 +5,8 @@ Rails.configuration.to_prepare do
 
   require 'redmine_favorite_projects/patches/application_helper_patch'
   require 'redmine_favorite_projects/patches/project_patch'
+  require 'redmine_favorite_projects/patches/issue_query_patch'
+  require 'redmine_favorite_projects/patches/query_patch'
   require 'redmine_favorite_projects/patches/projects_controller_patch'
   require 'redmine_favorite_projects/patches/projects_helper_patch'
   require 'redmine_favorite_projects/patches/auto_completes_controller_patch'
