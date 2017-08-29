@@ -161,7 +161,7 @@ class FavoriteProjectsQuery < Query
 
   def objects_scope(options={})
     scope = Project.visible.order(:lft)
-
+    scope = scope.joins("LEFT JOIN #{CustomValue.table_name} ON #{CustomValue.table_name}.customized_type='Project' AND #{CustomValue.table_name}.customized_id = projects.id ")
     if options[:search].present?
       scope = scope.where(seach_condition(options[:search]))
     end
@@ -225,7 +225,7 @@ class FavoriteProjectsQuery < Query
     pattern = "%#{search.to_s.strip.downcase}%"
     ["(LOWER(#{Project.table_name}.name) LIKE :p OR
        LOWER(identifier) LIKE :p OR
-       LOWER(#{Project.table_name}.description) LIKE :p)",
+       LOWER(#{Project.table_name}.description) LIKE :p) OR (#{CustomValue.table_name}.value LIKE :p)",
        {:p => pattern}]
   end
 
