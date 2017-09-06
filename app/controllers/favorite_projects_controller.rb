@@ -35,7 +35,8 @@ class FavoriteProjectsController < ApplicationController
           :include => [:avatar],
           :search => params[:search],
           :limit  =>  @limit,
-          :offset =>  @offset
+          :offset =>  @offset,
+          order: 'identifier DESC'
       )
 
       respond_to do |format|

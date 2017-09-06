@@ -160,7 +160,7 @@ class FavoriteProjectsQuery < Query
   end
 
   def objects_scope(options={})
-    scope = Project.visible.order(:lft)
+    scope = Project.visible.order('identifier DESC')
     scope = scope.joins("INNER JOIN #{CustomValue.table_name} ON #{CustomValue.table_name}.customized_type='Project' AND #{CustomValue.table_name}.customized_id = projects.id ")
     if options[:search].present?
       scope = scope.where(seach_condition(options[:search]))
@@ -172,7 +172,7 @@ class FavoriteProjectsQuery < Query
 
     scope = scope.where(statement).
       where(options[:conditions])
-    scope = scope.order('identifier DESC')
+    # scope = scope.order('identifier DESC')
     scope.uniq
   end
 
