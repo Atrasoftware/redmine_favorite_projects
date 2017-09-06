@@ -22,7 +22,7 @@ class FavoriteProjectQueriesController < ApplicationController
     @query_count = FavoriteProjectsQuery.visible.count
     @query_pages = Paginator.new @query_count, @limit, params['page']
     @queries = FavoriteProjectsQuery.visible.
-                    order("#{Query.table_name}.identifier").
+                    order("#{Query.table_name}.name").
                     limit(@limit).
                     offset(@offset).
                     all

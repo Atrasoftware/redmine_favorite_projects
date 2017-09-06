@@ -172,7 +172,7 @@ class FavoriteProjectsQuery < Query
 
     scope = scope.where(statement).
       where(options[:conditions])
-
+    scope = scope.order('identifier DESC')
     scope.uniq
   end
 
