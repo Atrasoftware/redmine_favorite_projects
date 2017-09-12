@@ -11,10 +11,21 @@ module RedmineFavoriteProjects
         base.class_eval do
           unloadable 
           alias_method_chain :render_project_jump_box, :only_favorites
+          alias_method_chain :link_to_project, :identifier
         end
       end
 
       module InstanceMethods
+        def link_to_project_with_identifier(project, options={}, html_options = nil)
+          if project.archived?
+            h(project.to_s)
+          else
+            link_to project.to_s,
+                    project_url(project, {:only_path => true}.merge(options)),
+                    html_options
+          end
+        end
+
         # Adds a rates tab to the user administration page
         def render_project_jump_box_with_only_favorites
           return unless User.current.logged?
